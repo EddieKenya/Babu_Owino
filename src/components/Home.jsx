@@ -1,15 +1,25 @@
 import React from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
+import { useNavigate } from 'react-router-dom'; // Import for navigation
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white select-none"> {/* select-none prevents text highlighting */}
       
-      {/* HERO SECTION: White on mobile, Slate on desktop */}
+      {/* HERO SECTION */}
       <section className="relative bg-white md:bg-[#334155] text-[#334155] md:text-white min-h-screen flex flex-col overflow-hidden">
         
-        <Header />
+        {/* Fixed: Passing darkText based on screen size logic or forced for mobile */}
+        {/* On mobile bg is white, so we need darkText={true} for the icon to be visible */}
+        <div className="md:hidden">
+            <Header darkText={true} />
+        </div>
+        <div className="hidden md:block">
+            <Header darkText={false} />
+        </div>
 
         {/* Content Area */}
         <div className="relative flex-1 flex flex-col md:flex-row items-center justify-between px-6 md:px-24 z-20">
@@ -26,23 +36,28 @@ const Home = () => {
             <p className="text-xl md:text-2xl tracking-[0.2em] text-slate-600 md:text-slate-300 font-medium mb-8 md:mb-12">
               GOVERNOR OF NAIROBI
             </p>
-            <button className="mx-auto md:mx-0 w-fit bg-[#334155] md:bg-white text-white md:text-[#334155] px-12 md:px-14 py-4 md:py-5 text-[10px] md:text-xs font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-2xl">
-              Get Involved
+            
+            {/* Fixed: Button now leads to About.jsx */}
+            <button 
+              onClick={() => navigate('/about')}
+              className="mx-auto md:mx-0 w-fit bg-[#334155] md:bg-white text-white md:text-[#334155] px-12 md:px-14 py-4 md:py-5 text-[10px] md:text-xs font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-2xl"
+            >
+              About the Candidate
             </button>
           </div>
 
-          {/* Right Side: Image - No color overlays or overshadowing */}
+          {/* Right Side: Image with No-Copy Protection */}
           <div className="w-full md:w-[55%] flex items-end md:items-center justify-center md:justify-end relative h-[65vh] md:h-full mt-auto">
             <img 
               src="/babu.png" 
               alt="Hon. Babu Owino" 
-              className="w-auto h-full md:h-[120vh] object-contain object-bottom md:object-right scale-[1.35] md:scale-150 md:-translate-y-12 md:-mr-20 z-10"
+              onContextMenu={(e) => e.preventDefault()} // Disables right-click save
+              draggable="false" // Prevents dragging image
+              className="w-auto h-full md:h-[120vh] object-contain object-bottom md:object-right scale-[1.35] md:scale-150 md:-translate-y-12 md:-mr-20 z-10 pointer-events-none" 
             />
-            {/* Removed the gradient overlay here so the image is 100% clear */}
           </div>
         </div>
 
-        {/* Desktop-only subtle floor shadow to anchor the image without covering it */}
         <div className="hidden md:block absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/20 to-transparent pointer-events-none z-0" />
       </section>
 
